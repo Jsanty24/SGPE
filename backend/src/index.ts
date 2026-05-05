@@ -110,11 +110,12 @@ app.use(helmet({
   contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
 }));
 app.use(compression({ level: 6, threshold: 1024 }));
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173').split(',').map(o => o.trim());
 app.use(cors({
   origin: (origin, callback) => {
-    const allowed = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173').split(',');
-    if (!origin || allowed.includes(origin)) callback(null, true);
-    else callback(new Error('CORS no permitido'));
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    console.log('CORS blocked origin:', origin);
+    callback(new Error('CORS no permitido'));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
