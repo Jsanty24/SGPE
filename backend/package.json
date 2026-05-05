@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "start": "npx ts-node src/index.ts",
+    "start": "npx tsx src/index.ts",
     "postinstall": "npx prisma generate",
     "seed": "npx prisma db seed",
     "db:push": "npx prisma db push"
@@ -50,7 +50,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.2"
-  },
-  "devDependencies": {}
+  }
 }
