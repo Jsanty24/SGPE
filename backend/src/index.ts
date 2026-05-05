@@ -55,7 +55,7 @@ const io = new SocketServer(server, {
 });
 setIO(io);
 
-const PORT = process.env.PORT || 5000;
+const PORT = parseInt(process.env.PORT || '5000', 10);
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
   throw new Error('JWT_SECRET no esta definido en las variables de entorno');
