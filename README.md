@@ -11,15 +11,15 @@
 
 **Backend (.env):**
 ```
-DATABASE_URL=postgresql://postgres:password@db.xxx.supabase.co:5432/postgres
-JWT_SECRET=tu_secreto_seguro
-NODE_ENV=production
-FRONTEND_URL=https://tu-frontend.vercel.app
+DATABASE_URL=
+JWT_SECRET=
+NODE_ENV=
+FRONTEND_URL=
 ```
 
 **Frontend (Vercel):**
 ```
-VITE_API_URL=https://tu-backend.up.railway.app
+VITE_API_URL=
 ```
 
 ---
@@ -42,20 +42,6 @@ npm run dev
 
 - Frontend: http://localhost:5173
 - Backend: http://localhost:5000
-
----
-
-## 👤 Credenciales de Acceso
-
-| Rol | Correo | Contraseña |
-|-----|--------|------------|
-| **Admin** | juansantiagoblanco@outlook.com | 12345678 |
-| **Gerente** | gerente@sgpe.com | Gerente1234! |
-| **Miembro 1** | miembro1@sgpe.com | Miembro1234! |
-| **Miembro 2** | miembro2@sgpe.com | Miembro1234! |
-| **Cliente** | cliente@sgpe.com | Cliente1234! |
-
----
 
 ## 🎨 Características
 
