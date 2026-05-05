@@ -43,7 +43,7 @@ import verificacionRoutes from './routes/verificacion.routes';
 import cuentaRoutes from './routes/cuenta.routes';
 import backupRoutes from './routes/backup.routes';
 import { errorHandler } from './middlewares/errorHandler';
-import { sanitizeInput } from './middlewares/sanitize';
+// import { sanitizeInput } from './middlewares/sanitize'; // Comentado: jsdom causa error en Railway
 import { verificarTareasVencimiento } from './services/cron.service';
 
 const app = express();
@@ -135,7 +135,7 @@ app.use('/api/uploads', express.static(BASE_UPLOADS));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use(sanitizeInput);
+// app.use(sanitizeInput); // Comentado: jsdom causa error en Railway
 
 app.get('/api/health', async (_req, res) => {
   try {
