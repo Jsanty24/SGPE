@@ -201,8 +201,8 @@ async function main() {
     await prisma.$connect();
     await prisma.usuario.updateMany({ data: { estado: 'INACTIVO' } });
     console.log('Base de datos conectada correctamente');
-    server.listen(PORT, () => {
-      console.log(`Servidor corriendo en http://localhost:${PORT} (WebSocket activo)`);
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`Servidor corriendo en http://0.0.0.0:${PORT} (WebSocket activo)`);
     });
   } catch (error) {
     console.error('Error al conectar la base de datos:', error);
