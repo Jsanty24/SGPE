@@ -55,7 +55,8 @@ const io = new SocketServer(server, {
 });
 setIO(io);
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
+const PORT = Number(process.env.PORT);
+if (!PORT) throw new Error('RAILWAY NO ASIGNO PUERTO');
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
   throw new Error('JWT_SECRET no esta definido en las variables de entorno');
@@ -110,13 +111,8 @@ app.use(helmet({
   contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
 }));
 app.use(compression({ level: 6, threshold: 1024 }));
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173').split(',').map(o => o.trim());
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-    console.log('CORS blocked origin:', origin);
-    callback(new Error('CORS no permitido'));
-  },
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
