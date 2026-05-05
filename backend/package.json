@@ -6,6 +6,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "npx ts-node src/index.ts",
+    "postinstall": "npx prisma generate",
     "seed": "npx prisma db seed",
     "db:push": "npx prisma db push"
   },
