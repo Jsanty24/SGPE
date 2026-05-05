@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api',
   transformRequest: [(data, headers) => {
     if (data instanceof FormData) {
       delete headers['Content-Type'];
@@ -62,9 +62,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await axios.post('/api/auth/refresh', { refreshToken }, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('sgpe_token')}` }
-        });
+        const { data } = await api.post('/auth/refresh', { refreshToken });
 
         if (data.success && data.data) {
           const { token, refreshToken: newRefresh } = data.data;
