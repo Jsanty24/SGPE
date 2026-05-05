@@ -1,0 +1,24 @@
+# Guía Rápida para Colaboradores - SGPE
+
+¡Hola! Has recibido el código fuente del Sistema de Gestión de Proyectos Estratégicos (SGPE). Sigue estos pasos para configurarlo en tu PC local:
+
+## Requisitos Previos
+- Tener instalado **Node.js** (versión 18 o superior).
+- Tener instalado **npm** (viene con Node.js).
+
+## Configuración Inicial
+Para ahorrar espacio, esta carpeta no contiene las librerías pesadas. Debes instalarlas una sola vez:
+
+1. Abre una terminal en esta carpeta.
+2. Ejecuta: `npm install`
+3. Ve a la carpeta `backend` y ejecuta: `npm install`
+4. Ve a la carpeta `frontend` y ejecuta: `npm install`
+
+## Cómo iniciar el Proyecto
+Una vez instaladas las librerías, simplemente haz doble clic en el archivo:
+👉 **`SGPE.bat`**
+
+Esto abrirá tanto el Servidor (Backend) como la Interfaz (Frontend) automáticamente.
+
+---
+*Nota: Si es la primera vez que usas el backend, asegúrate de tener el archivo `.env` configurado (se incluye uno de ejemplo).*

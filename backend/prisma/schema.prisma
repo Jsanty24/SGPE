@@ -1,0 +1,214 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id                  String              @id @default(uuid())
+  codigo              Int?                @unique
+  nombre              String
+  correo              String              @unique
+  contrasena          String
+  avatar              String?
+  rol                 String              @default("MIEMBRO")
+  activo              Boolean             @default(true)
+  estado              String              @default("ACTIVO")
+  tokenRecupera       String?
+  tokenExpira         DateTime?
+  refreshToken        String?
+  refreshTokenExpira  DateTime?
+  emailVerificado     Boolean             @default(false)
+  tokenVerifEmail     String?             @db.VarChar(255)
+  noMolestarActivo    Boolean             @default(false)
+  noMolestarInicio    String?             @db.VarChar(5)
+  noMolestarFin       String?             @db.VarChar(5)
+  intentosFallidos    Int                 @default(0)
+  bloqueadoHasta      DateTime?
+  ubicacionLat        Float?
+  ubicacionLng        Float?
+  ubicacionActualizada DateTime?
+  ultimaConexion      DateTime?
+  createdAt           DateTime            @default(now())
+  proyectos           ProyectoUsuario[]
+  tareasAsignadas     Tarea[]
+  comentarios         Comentario[]
+  archivos            Archivo[]
+  archivosProyecto    ArchivoProyecto[]
+  notificaciones      Notificacion[]
+  historialEstados    HistorialEstado[]
+  proyectosGerente    Proyecto[]          @relation("GerenteProyecto")
+  mensajesChat        MensajeChat[]
+}
+
+model Proyecto {
+  id          String             @id @default(uuid())
+  nombre      String
+  descripcion String             @db.Text
+  fechaInicio DateTime
+  fechaFin    DateTime
+  estado      String             @default("ACTIVO")
+  cliente     String?
+  gerenteId   String
+  gerente     Usuario            @relation("GerenteProyecto", fields: [gerenteId], references: [id])
+  miembros    ProyectoUsuario[]
+  tareas      Tarea[]
+  hitos       Hito[]
+  archivos    ArchivoProyecto[]
+  mensajes    MensajeChat[]
+  createdAt   DateTime           @default(now())
+  @@index([estado])
+  @@index([gerenteId])
+}
+
+model ProyectoUsuario {
+  id         String   @id @default(uuid())
+  proyectoId String
+  usuarioId  String
+  proyecto   Proyecto @relation(fields: [proyectoId], references: [id], onDelete: Cascade)
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([proyectoId, usuarioId])
+  @@index([usuarioId])
+}
+
+model Tarea {
+  id            String             @id @default(uuid())
+  nombre        String
+  descripcion   String             @db.Text
+  prioridad     String             @default("MEDIA")
+  fechaLimite   DateTime
+  estado        String             @default("PENDIENTE")
+  orden         Int                @default(0)
+  horasEstimadas Float?
+  horasReales   Float?
+  evidencia     String?            // Ruta de archivo de evidencia al completar
+  proyectoId    String
+  proyecto      Proyecto           @relation(fields: [proyectoId], references: [id], onDelete: Cascade)
+  asignadoAId   String?
+  asignadoA     Usuario?           @relation(fields: [asignadoAId], references: [id])
+  comentarios   Comentario[]
+  archivos      Archivo[]
+  historial     HistorialEstado[]
+  subtareas     Subtarea[]
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  @@index([estado])
+  @@index([proyectoId])
+  @@index([asignadoAId])
+  @@index([proyectoId, estado])
+}
+
+model Subtarea {
+  id          String   @id @default(uuid())
+  titulo      String
+  completada  Boolean  @default(false)
+  tareaId     String
+  tarea       Tarea    @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([tareaId])
+}
+
+model HistorialEstado {
+  id             String   @id @default(uuid())
+  tareaId        String
+  tarea          Tarea    @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+  estadoAnterior String
+  estadoNuevo    String
+  coordenadas    String?
+  cambiadoPorId  String
+  cambiadoPor    Usuario  @relation(fields: [cambiadoPorId], references: [id])
+  createdAt      DateTime @default(now())
+
+  @@index([tareaId])
+}
+
+model Comentario {
+  id        String   @id @default(uuid())
+  contenido String   @db.Text
+  tareaId   String
+  tarea     Tarea    @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+  autorId   String
+  autor     Usuario  @relation(fields: [autorId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([tareaId])
+}
+
+model Archivo {
+  id          String   @id @default(uuid())
+  url         String   @db.Text
+  nombre      String
+  mimetype    String?
+  tareaId     String
+  tarea       Tarea    @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+  subidoPorId String
+  subidoPor   Usuario  @relation(fields: [subidoPorId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([tareaId])
+}
+
+model Notificacion {
+  id            String   @id @default(uuid())
+  mensaje       String   @db.Text
+  tipo          String?  @db.VarChar(50)
+  referenciaId  String?  @db.VarChar(36)
+  referenciaType String? @db.VarChar(20)
+  leida         Boolean  @default(false)
+  pendiente     Boolean  @default(false)
+  usuarioId     String
+  usuario       Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+
+  @@index([usuarioId, leida])
+  @@index([usuarioId, createdAt])
+  @@index([usuarioId, leida, pendiente])
+  @@index([createdAt])
+}
+
+model MensajeChat {
+  id         String   @id @default(uuid())
+  contenido  String   @db.Text
+  proyectoId String
+  autorId    String
+  editado    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  proyecto   Proyecto @relation(fields: [proyectoId], references: [id], onDelete: Cascade)
+  autor      Usuario  @relation(fields: [autorId], references: [id], onDelete: Restrict)
+
+  @@index([proyectoId, createdAt])
+}
+
+model Hito {
+  id          String   @id @default(uuid())
+  titulo      String
+  descripcion String?  @db.Text
+  fecha       DateTime
+  completado  Boolean  @default(false)
+  proyectoId  String
+  proyecto    Proyecto @relation(fields: [proyectoId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([proyectoId])
+}
+
+model ArchivoProyecto {
+  id          String   @id @default(uuid())
+  url         String   @db.Text
+  nombre      String
+  mimetype    String?
+  proyectoId  String
+  proyecto    Proyecto @relation(fields: [proyectoId], references: [id], onDelete: Cascade)
+  subidoPorId String
+  subidoPor   Usuario  @relation(fields: [subidoPorId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([proyectoId])
+}

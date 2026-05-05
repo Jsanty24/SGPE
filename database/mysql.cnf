@@ -1,0 +1,39 @@
+[mysqld]
+# ── Charset y collation ──
+character-set-server = utf8mb4
+collation-server     = utf8mb4_unicode_ci
+
+# ── InnoDB ──
+innodb_buffer_pool_size        = 512M
+innodb_buffer_pool_instances   = 2
+innodb_log_file_size           = 128M
+innodb_flush_log_at_trx_commit = 1
+innodb_file_per_table          = ON
+innodb_strict_mode             = ON
+
+# ── Conexiones ──
+max_connections        = 150
+max_connect_errors     = 10000
+wait_timeout           = 600
+interactive_timeout    = 600
+connect_timeout        = 10
+
+# ── Performance ──
+performance_schema = ON
+
+# ── Logs ──
+slow_query_log            = ON
+slow_query_log_file       = C:/ProgramData/MySQL/MySQL Server 8.0/Data/slow.log
+long_query_time           = 2
+log_queries_not_using_indexes = ON
+
+# ── Binary log ──
+log_bin           = mysql-bin
+binlog_format     = ROW
+expire_logs_days  = 7
+
+# ── Timezone ──
+default_time_zone = '-05:00'
+
+[client]
+default-character-set = utf8mb4
