@@ -23,8 +23,9 @@ const prisma = new PrismaClient();
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ['https://sgpe-nu.vercel.app', 'http://localhost:5173'],
+    origin: (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,https://sgpe-nu.vercel.app,https://sgpe-production.up.railway.app').split(',').map(o => o.trim()),
     credentials: true,
+    methods: ['GET', 'POST'],
   },
 });
 
@@ -48,8 +49,12 @@ app.use(express.urlencoded({ extended: true }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: process.env.NODE_ENV === 'production' ? 1000 : 100,
   message: 'Too many requests from this IP, please try again later.',
+  skip: (req) => {
+    // Skip rate limiting for health checks
+    return req.path === '/api/health';
+  }
 });
 
 app.use('/api/', limiter);
