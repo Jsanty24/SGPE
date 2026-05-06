@@ -56,3 +56,18 @@ export const verificarTareasVencimiento = async (prisma: PrismaClient): Promise<
     console.error('Error en cron job de vencimiento:', error);
   }
 };
+
+export const setupCronJobs = () => {
+  console.log('Verificando vencimientos...');
+  // Ejecutar cada hora
+  setInterval(async () => {
+    const prisma = new PrismaClient();
+    try {
+      await verificarTareasVencimiento(prisma);
+    } catch (error) {
+      console.error('Error en cron job:', error);
+    } finally {
+      await prisma.$disconnect();
+    }
+  }, 60 * 60 * 1000);
+};
