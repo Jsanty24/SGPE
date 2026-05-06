@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import { chatService } from '../services/apiService';
 import api from '../services/api';
 import UserAvatar from './UserAvatar';
 
@@ -39,7 +40,7 @@ export default function ProjectChat({ proyectoId, isOpen, onToggle }: Props) {
   const fetchMensajes = useCallback(async () => {
     setLoading(true);
     try {
-      const { data } = await api.get(`/chat/proyecto/${proyectoId}`);
+      const { data } = await chatService.getMensajes(proyectoId);
       if (data.success) setMensajes(data.data);
     } catch {
       toastError('Error', 'No se pudo cargar el chat');
@@ -96,7 +97,7 @@ export default function ProjectChat({ proyectoId, isOpen, onToggle }: Props) {
     if (!txt || enviando) return;
     setEnviando(true);
     try {
-      const { data } = await api.post(`/chat/proyecto/${proyectoId}`, { contenido: txt });
+      const { data } = await chatService.enviarMensaje(proyectoId, txt);
       if (data.success) {
         setMensajes(prev => [...prev, { ...data.data, autorNombre: data.data.autor.nombre, autorAvatar: data.data.autor.avatar, autorId: data.data.autor.id }]);
       }
