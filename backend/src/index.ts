@@ -13,7 +13,7 @@ import taskRoutes from './routes/tarea.routes';
 import commentRoutes from './routes/comentario.routes';
 import notificationRoutes from './routes/notificacion.routes';
 import reportRoutes from './routes/reporte.routes';
-import { errorHandler } from './middleware/errorHandler';
+import { errorHandler } from './middlewares/errorHandler';
 import { setupCronJobs } from './services/cron.service';
 import { setupSocketIO } from './services/socketService';
 
