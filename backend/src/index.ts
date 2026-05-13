@@ -68,20 +68,20 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 app.use('/api/auth', authRoutes);
-app.use('/api/usuarios', userRoutes);
-app.use('/api/proyectos', projectRoutes);
-app.use('/api/tareas', taskRoutes);
-app.use('/api/comentarios', commentRoutes);
-app.use('/api/notificaciones', notificationRoutes);
-app.use('/api/reportes', reportRoutes);
-app.use('/api/actividad', actividadRoutes);
-app.use('/api/archivos', archivoRoutes);
-app.use('/api/archivos-proyecto', archivoProyectoRoutes);
-app.use('/api/calendario', calendarioRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/tasks', taskRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/activity', actividadRoutes);
+app.use('/api/files', archivoRoutes);
+app.use('/api/project-files', archivoProyectoRoutes);
+app.use('/api/calendar', calendarioRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/cuenta', cuentaRoutes);
-app.use('/api/historial', historialRoutes);
-app.use('/api/verificacion', verificacionRoutes);
+app.use('/api/history', historialRoutes);
+app.use('/api/verification', verificacionRoutes);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', db: 'connected' });
