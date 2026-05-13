@@ -63,9 +63,9 @@ router.post('/register', validate([
     }
 
     const hashedPassword = await bcrypt.hash(contrasena, BCRYPT_ROUNDS);
-    const totalUsuarios = await prisma.usuario.count();
+    const maxCodigo = await prisma.usuario.aggregate({ _max: { codigo: true } });
     const usuario = await prisma.usuario.create({
-      data: { nombre, correo, contrasena: hashedPassword, rol: rol || 'VIEWER', codigo: totalUsuarios + 1 },
+      data: { nombre, correo, contrasena: hashedPassword, rol: rol || 'VIEWER', codigo: (maxCodigo._max.codigo || 0) + 1 },
       select: selectUsuario
     });
 
@@ -90,6 +90,7 @@ router.post('/register', validate([
       message: 'Usuario registrado exitosamente'
     });
   } catch (error: any) {
+    console.error('Error en registro:', error?.message || error, error?.stack);
     res.status(500).json({ success: false, message: 'Error al registrar usuario' });
   }
 });
