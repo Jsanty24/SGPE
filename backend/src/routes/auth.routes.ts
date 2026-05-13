@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import { body } from 'express-validator';
 import { validate } from '../middlewares/validators';
 import { loginLimiter } from '../middlewares/rateLimit';
-import { enviarCorreo, sendWelcomeEmail, sendPasswordResetEmail, sendVerificationEmail } from '../services/email.service';
+import { sendWelcomeEmail, sendPasswordResetEmail, sendVerificationEmail } from '../services/email.service';
 import { prisma } from '../lib/prisma';
 
 const router = Router();
@@ -71,10 +71,17 @@ router.post('/register', validate([
 
     const { accessToken, refreshToken } = await generarTokens(usuario);
 
+    const tokenVerif = crypto.randomBytes(32).toString('hex');
+    await prisma.usuario.update({
+      where: { id: usuario.id },
+      data: { tokenVerifEmail: tokenVerif },
+    });
+
     try {
       await sendWelcomeEmail({ nombre, correo, rol: rol || 'VIEWER' });
+      await sendVerificationEmail({ nombre, correo, token: tokenVerif });
     } catch (err) {
-      console.error('Email de bienvenida fallido:', (err as Error).message);
+      console.error('Email fallido:', (err as Error).message);
     }
 
     res.status(201).json({
