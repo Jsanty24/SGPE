@@ -7,6 +7,7 @@ const resend = process.env.RESEND_API_KEY
 const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@sgpe.online';
 const FROM_NAME = 'SGPE';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://sgpe.online';
+const API_URL = process.env.API_URL || 'https://sgpe-production.up.railway.app';
 
 const COLOR_PRIMARY = '#6366f1';
 const COLOR_SECONDARY = '#8b5cf6';
@@ -126,7 +127,7 @@ export async function sendWelcomeEmail(destinatario: { nombre: string; correo: s
 }
 
 export async function sendVerificationEmail(destinatario: { nombre: string; correo: string; token: string }): Promise<void> {
-  const link = `${FRONTEND_URL}/verificar-email/${destinatario.token}`;
+  const link = `${API_URL}/api/verification/confirmar/${destinatario.token}`;
 
   const html = layout(`
     <div style="text-align:center;margin-bottom:28px;">
