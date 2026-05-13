@@ -1,31 +1,28 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.EMAIL_PORT || '587'),
-  secure: process.env.EMAIL_SECURE === 'true',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
+
+const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@sgpe.online';
+const FROM_NAME = 'SGPE';
 
 export const enviarCorreo = async (to: string, subject: string, html: string, text?: string): Promise<void> => {
   try {
-    if (!process.env.EMAIL_USER || process.env.EMAIL_USER === 'tucorreo@gmail.com') {
-      console.log(`\uD83D\uDCE7 [Simulado] Correo a: ${to} - Asunto: ${subject}`);
+    if (!resend) {
+      console.log(`📧 [Simulado] Correo a: ${to} - Asunto: ${subject}`);
       return;
     }
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM || `"SGPE" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to,
       subject,
       html,
-      text
+      text,
     });
-    console.log(`\uD83D\uDCE7 Correo enviado a: ${to}`);
+    console.log(`📧 Correo enviado a: ${to}`);
   } catch (error) {
-    console.error('\u274C Error al enviar correo:', error);
+    console.error('❌ Error al enviar correo:', error);
   }
 };
 
