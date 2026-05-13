@@ -39,7 +39,7 @@ const generarTokens = async (usuario: { id: string; correo: string; rol: string 
 
 const selectUsuario = {
   id: true, codigo: true, nombre: true, correo: true, rol: true, estado: true, avatar: true,
-  noMolestarActivo: true, noMolestarInicio: true, noMolestarFin: true, createdAt: true
+  emailVerificado: true, noMolestarActivo: true, noMolestarInicio: true, noMolestarFin: true, createdAt: true
 };
 
 router.post('/register', validate([
@@ -107,6 +107,11 @@ router.post('/login', loginLimiter, validate([
       return;
     }
 
+    if (!usuario.emailVerificado) {
+      res.status(403).json({ success: false, message: 'Debes verificar tu correo antes de iniciar sesión. Revisa tu bandeja de entrada.' });
+      return;
+    }
+
     if (usuario.bloqueadoHasta && usuario.bloqueadoHasta > new Date()) {
       const mins = Math.ceil((usuario.bloqueadoHasta.getTime() - Date.now()) / 60000);
       res.status(423).json({ success: false, message: `Cuenta bloqueada. Intenta en ${mins} minutos` });
@@ -141,7 +146,7 @@ router.post('/login', loginLimiter, validate([
       data: {
         usuario: {
           id: usuario.id, codigo: usuario.codigo, nombre: usuario.nombre, correo: usuario.correo,
-          rol: usuario.rol, estado: 'ACTIVO', avatar: usuario.avatar,
+          rol: usuario.rol, estado: 'ACTIVO', avatar: usuario.avatar, emailVerificado: usuario.emailVerificado,
           noMolestarActivo: usuario.noMolestarActivo, noMolestarInicio: usuario.noMolestarInicio, noMolestarFin: usuario.noMolestarFin,
         },
         token: accessToken,
