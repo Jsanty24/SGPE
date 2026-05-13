@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import { body } from 'express-validator';
 import { validate } from '../middlewares/validators';
 import { loginLimiter } from '../middlewares/rateLimit';
-import { sendWelcomeEmail, sendPasswordResetEmail, sendVerificationEmail } from '../services/email.service';
+import { sendPasswordResetEmail, sendVerificationEmail } from '../services/email.service';
 import { prisma } from '../lib/prisma';
 
 const router = Router();
@@ -78,7 +78,6 @@ router.post('/register', validate([
     });
 
     try {
-      await sendWelcomeEmail({ nombre, correo, rol: rol || 'VIEWER' });
       await sendVerificationEmail({ nombre, correo, token: tokenVerif });
     } catch (err) {
       console.error('Email fallido:', (err as Error).message);
