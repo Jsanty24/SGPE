@@ -29,6 +29,8 @@ const app = express();
 const httpServer = createServer(app);
 const prisma = new PrismaClient();
 
+const ALWAYS_ALLOWED = ['http://localhost:5173', 'https://sgpe-nu.vercel.app', 'https://sgpe.online', 'https://www.sgpe.online'];
+
 const io = new Server(httpServer, {
   cors: {
     origin: [...new Set([...ALWAYS_ALLOWED, 'https://sgpe-production.up.railway.app', ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim()) : [])])],
@@ -44,8 +46,6 @@ app.use(helmet({
 }));
 
 app.use(compression());
-
-const ALWAYS_ALLOWED = ['http://localhost:5173', 'https://sgpe-nu.vercel.app', 'https://sgpe.online', 'https://www.sgpe.online'];
 
 app.use(cors({
   origin: (origin, callback) => {
