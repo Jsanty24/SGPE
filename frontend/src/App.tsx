@@ -14,6 +14,7 @@ const LoginPage           = lazy(() => import('./pages/LoginPage'));
 const RegisterPage        = lazy(() => import('./pages/RegisterPage'));
 const ForgotPasswordPage  = lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage   = lazy(() => import('./pages/ResetPasswordPage'));
+const VerificadoPage     = lazy(() => import('./pages/VerificadoPage'));
 const DashboardPage       = lazy(() => import('./pages/DashboardPage'));
 const ProyectosListPage   = lazy(() => import('./pages/ProyectosListPage'));
 const CrearProyectoPage   = lazy(() => import('./pages/CrearProyectoPage'));
@@ -47,6 +48,7 @@ const AppRoutes = () => {
         <Route path="/register"               element={isAuthenticated ? <Navigate to="/proyectos" replace /> : <RegisterPage />} />
         <Route path="/forgot-password"        element={<ForgotPasswordPage />} />
         <Route path="/reset-password/:token"  element={<ResetPasswordPage />} />
+        <Route path="/verificado"             element={<VerificadoPage />} />
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route index                        element={<Navigate to="/proyectos" replace />} />
           <Route path="dashboard"             element={<ProtectedRoute roles={['ADMIN','GERENTE']}><DashboardPage /></ProtectedRoute>} />

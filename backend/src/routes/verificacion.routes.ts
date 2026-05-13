@@ -40,7 +40,7 @@ router.get('/confirmar/:token', async (req: Request, res: Response) => {
 
     if (!encontrado) {
       const frontendUrl = process.env.FRONTEND_URL || 'https://sgpe.online';
-      res.redirect(`${frontendUrl}/login?verificado=error`);
+      res.redirect(`${frontendUrl}/verificado?error=1`);
       return;
     }
 
@@ -50,7 +50,7 @@ router.get('/confirmar/:token', async (req: Request, res: Response) => {
     });
 
     const frontendUrl = process.env.FRONTEND_URL || 'https://sgpe.online';
-    res.redirect(`${frontendUrl}/login?verificado=ok`);
+    res.redirect(`${frontendUrl}/verificado`);
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Error al verificar correo' });
   }
