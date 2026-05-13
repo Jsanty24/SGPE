@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import { body } from 'express-validator';
 import { validate } from '../middlewares/validators';
 import { loginLimiter } from '../middlewares/rateLimit';
-import { enviarCorreo, sendWelcomeEmail } from '../services/email.service';
+import { enviarCorreo, sendWelcomeEmail, sendPasswordResetEmail, sendVerificationEmail } from '../services/email.service';
 import { prisma } from '../lib/prisma';
 
 const router = Router();
@@ -231,13 +231,7 @@ router.post('/forgot-password', validate([
       data: { tokenRecupera: tokenHash, tokenExpira }
     });
 
-    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${token}`;
-    await enviarCorreo(correo, 'Recuperación de contraseña - SGPE',
-      `<h2>Recuperación de contraseña</h2>
-       <p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
-       <a href="${resetUrl}">Restablecer contraseña</a>
-       <p>Este enlace expira en 1 hora.</p>`
-    );
+    await sendPasswordResetEmail({ nombre: usuario.nombre, correo: usuario.correo, token });
 
     res.json({ success: true, message: 'Si el correo existe, recibirás un enlace de recuperación' });
   } catch (error: any) {

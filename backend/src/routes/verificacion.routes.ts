@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import crypto from 'crypto';
 import { prisma } from '../lib/prisma';
-import { enviarCorreo } from '../services/email.service';
+import { sendVerificationEmail } from '../services/email.service';
 
 const router = Router();
 
@@ -22,10 +22,7 @@ router.get('/enviar', async (req: Request, res: Response) => {
       data: { tokenVerifEmail: token },
     });
 
-    const verifUrl = `${frontendUrl}/verificar-email/${token}`;
-    await enviarCorreo(correo, 'Verifica tu correo - SGPE',
-      `<h2>Verificacion de correo</h2><p>Haz clic en el enlace para verificar tu cuenta:</p><a href="${verifUrl}">Verificar correo</a><p>Este enlace expira en 24 horas.</p>`
-    );
+    await sendVerificationEmail({ nombre: usuario.nombre, correo: usuario.correo, token });
 
     res.json({ success: true, message: 'Si el correo existe, recibiras un enlace' });
   } catch (error: any) {
