@@ -504,7 +504,7 @@ export default function ProyectoDetailPage() {
             <textarea {...regTarea('descripcion')} rows={3} placeholder="Descripción" className="glass-input resize-none" />
             {errTarea.descripcion && <p className="glass-error">⚠ {errTarea.descripcion.message}</p>}
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="glass-label">Prioridad</label>
               <select {...regTarea('prioridad')} className="glass-select">

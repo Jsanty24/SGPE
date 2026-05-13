@@ -471,7 +471,7 @@ export default function TareaDetailPage() {
             <textarea {...register('descripcion')} rows={3} className="glass-input resize-none" />
             {errors.descripcion && <p className="glass-error">⚠ {errors.descripcion.message}</p>}
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="glass-label">Prioridad</label>
               <select {...register('prioridad')} className="glass-select">
@@ -486,7 +486,7 @@ export default function TareaDetailPage() {
               {errors.fechaLimite && <p className="glass-error">⚠ {errors.fechaLimite.message}</p>}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="glass-label">Horas Estimadas</label>
               <input {...register('horasEstimadas')} type="number" step="0.5" min="0" placeholder="Ej. 5.5" className="glass-input" />

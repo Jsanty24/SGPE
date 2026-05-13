@@ -31,7 +31,7 @@ export default function Layout() {
   }, [location.pathname, isMobile]);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex overflow-hidden" style={{ height: '100dvh' }}>
       {/* Overlay para móviles */}
       <AnimatePresence>
         {sidebarOpen && isMobile && (

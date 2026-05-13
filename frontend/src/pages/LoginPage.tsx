@@ -60,7 +60,7 @@ function Scene3D({ count = 2500 }: { count?: number }) {
 }
 
 /* ─── 3D tilt card ────────────────────────────────────────── */
-function TiltCard({ children }: { children: React.ReactNode }) {
+function TiltCard({ children, isLowEnd: low }: { children: React.ReactNode; isLowEnd?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const rotX = useMotionValue(0);
   const rotY = useMotionValue(0);
@@ -68,13 +68,13 @@ function TiltCard({ children }: { children: React.ReactNode }) {
   const springY = useSpring(rotY, { stiffness: 300, damping: 30 });
 
   const onMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
+    if (!ref.current || low) return;
     const rect = ref.current.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     rotX.set(((e.clientY - cy) / rect.height) * -12);
     rotY.set(((e.clientX - cx) / rect.width) * 12);
-  }, [rotX, rotY]);
+  }, [rotX, rotY, low]);
 
   const onLeave = useCallback(() => { rotX.set(0); rotY.set(0); }, [rotX, rotY]);
 
@@ -135,10 +135,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden"
       style={{ background: 'var(--bg-color, #09090f)' }}>
-      {/* 3D particles — adaptativo segun dispositivo */}
-      <div className="absolute inset-0 opacity-45 pointer-events-none">
-        <Scene3D count={particleCount} />
-      </div>
+      {/* 3D particles — solo en dispositivos con GPU */}
+      {!isLowEnd && (
+        <div className="absolute inset-0 opacity-45 pointer-events-none">
+          <Scene3D count={particleCount} />
+        </div>
+      )}
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 pointer-events-none"
@@ -168,7 +170,7 @@ export default function LoginPage() {
 
         {/* Card */}
         <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }}>
-          <TiltCard>
+          <TiltCard isLowEnd={isLowEnd}>
             <div className="glass-card rounded-3xl p-8">
               <h2 className="text-xl font-bold mb-6 text-center" style={{ color: 'var(--text-color)' }}>Iniciar Sesión</h2>
 

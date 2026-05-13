@@ -70,8 +70,9 @@ export default function KanbanBoard({ tareas, onEstadoChange, onTareaClick, show
           </label>
         </div>
       )}
-      <div className="flex lg:grid lg:grid-cols-4 gap-5 overflow-x-auto pb-6 snap-x snap-mandatory hide-scrollbar">
-        {columnas.map(col => {
+      <div className="relative">
+        <div className="flex lg:grid lg:grid-cols-4 gap-5 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-thin">
+          {columnas.map(col => {
           const colTareas = displayTareas.filter(t => t.estado === col.key).sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0));
           const isOver = dragOver === col.key;
 
@@ -205,6 +206,9 @@ export default function KanbanBoard({ tareas, onEstadoChange, onTareaClick, show
           </div>
         );
       })}
+        </div>
+        {/* Indicador sutil de scroll en móvil */}
+        <div className="lg:hidden absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary-500/30 to-transparent rounded-full mx-8" />
       </div>
     </div>
   );

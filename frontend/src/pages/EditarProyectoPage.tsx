@@ -100,7 +100,7 @@ export default function EditarProyectoPage() {
             <input {...register('cliente')} className="glass-input" placeholder="Ej: Empresa ABC" />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="glass-label">Fecha de inicio</label>
               <input {...register('fechaInicio')} type="date" className="glass-input" />

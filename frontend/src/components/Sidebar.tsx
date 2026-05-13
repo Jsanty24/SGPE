@@ -59,7 +59,7 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
                 <motion.button
                   whileTap={{ scale: 0.9 }}
                   onClick={onToggle}
-                  className="ml-auto p-1.5 rounded-lg text-dark-muted hover:text-dark-text transition-colors"
+                  className="hidden md:block ml-auto p-1.5 rounded-lg text-dark-muted hover:text-dark-text transition-colors"
                   style={{ background: 'var(--glass-bg)' }}
                   aria-label="Contraer sidebar"
                 >

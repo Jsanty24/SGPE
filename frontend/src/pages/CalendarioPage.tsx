@@ -88,7 +88,7 @@ export default function CalendarioPage() {
         </button>
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         {/* Calendar grid */}
         <div className="flex-1">
           <div className="glass-card rounded-2xl p-4 overflow-hidden">
