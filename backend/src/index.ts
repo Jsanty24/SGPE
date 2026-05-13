@@ -31,7 +31,7 @@ const prisma = new PrismaClient();
 
 const io = new Server(httpServer, {
   cors: {
-    origin: (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,https://sgpe-nu.vercel.app,https://sgpe-production.up.railway.app').split(',').map(o => o.trim()),
+    origin: (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,https://sgpe-nu.vercel.app,https://sgpe-production.up.railway.app,https://sgpe.online,https://www.sgpe.online').split(',').map(o => o.trim()),
     credentials: true,
     methods: ['GET', 'POST'],
   },
@@ -45,7 +45,7 @@ app.use(compression());
 
 app.use(cors({
   origin: (origin, callback) => {
-    const allowed = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,https://sgpe-nu.vercel.app').split(',').map(o => o.trim());
+    const allowed = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,https://sgpe-nu.vercel.app,https://sgpe.online,https://www.sgpe.online').split(',').map(o => o.trim());
     if (!origin || allowed.includes(origin)) return callback(null, true);
     callback(new Error('CORS blocked'));
   },
