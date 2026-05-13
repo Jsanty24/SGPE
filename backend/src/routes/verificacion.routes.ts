@@ -32,7 +32,7 @@ router.get('/enviar', async (req: Request, res: Response) => {
 
 router.get('/confirmar/:token', async (req: Request, res: Response) => {
   try {
-    const { token } = req.params;
+    const token = req.params.token as string;
 
     const encontrado = await prisma.usuario.findFirst({
       where: { tokenVerifEmail: token, emailVerificado: false },
