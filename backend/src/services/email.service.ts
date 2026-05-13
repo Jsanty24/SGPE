@@ -9,10 +9,13 @@ const FROM_NAME = 'SGPE';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://sgpe.online';
 const API_URL = process.env.API_URL || 'https://sgpe-production.up.railway.app';
 
-const COLOR_PRIMARY = '#6366f1';
-const COLOR_SECONDARY = '#8b5cf6';
-const COLOR_DARK = '#0f172a';
-const COLOR_ACCENT = '#06b6d4';
+const COLOR_BG = '#0a0a0f';
+const COLOR_CARD = '#12121a';
+const COLOR_BORDER = '#1e1e2e';
+const COLOR_TEXT = '#e4e4e7';
+const COLOR_MUTED = '#71717a';
+const COLOR_ACCENT = '#a78bfa';
+const COLOR_ACCENT_GLOW = 'rgba(167,139,250,0.15)';
 
 function layout(content: string): string {
   return `<!DOCTYPE html>
@@ -21,33 +24,37 @@ function layout(content: string): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;">
+<body style="margin:0;padding:0;background-color:${COLOR_BG};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;">
     <tr>
-      <td style="background:linear-gradient(135deg,${COLOR_DARK} 0%,#1e293b 100%);padding:36px 40px;text-align:center;border-radius:20px 20px 0 0;">
-        <div style="display:inline-block;width:56px;height:56px;background:linear-gradient(135deg,${COLOR_PRIMARY},${COLOR_SECONDARY});border-radius:16px;margin-bottom:12px;line-height:56px;font-size:28px;font-weight:900;color:white;">S</div>
-        <h1 style="color:#e2e8f0;margin:0;font-size:24px;font-weight:700;letter-spacing:1px;">SGPE</h1>
-        <p style="color:#64748b;margin:4px 0 0;font-size:13px;">Sistema de Gesti\u00F3n de Proyectos</p>
+      <td style="padding:48px 0 32px;text-align:center;">
+        <div style="display:inline-block;width:40px;height:40px;background:linear-gradient(135deg,${COLOR_ACCENT},#6d28d9);border-radius:12px;line-height:40px;font-size:20px;font-weight:700;color:white;letter-spacing:0;box-shadow:0 0 40px ${COLOR_ACCENT_GLOW};">S</div>
+        <p style="color:${COLOR_MUTED};margin:12px 0 0;font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;">SGPE</p>
       </td>
     </tr>
     <tr>
-      <td style="background:#ffffff;padding:40px;border-radius:0 0 20px 20px;">
+      <td style="background:${COLOR_CARD};padding:48px 40px;border:1px solid ${COLOR_BORDER};border-radius:16px;">
         ${content}
-        <hr style="border:0;border-top:1px solid #e2e8f0;margin:32px 0 20px;">
-        <table width="100%">
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:32px 40px;text-align:center;">
+        <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
-            <td style="text-align:center;padding:0 0 8px 0;">
-              <a href="${FRONTEND_URL}" style="color:${COLOR_PRIMARY};font-size:13px;text-decoration:none;margin:0 12px;">Inicio</a>
-              <span style="color:#cbd5e1;">|</span>
-              <a href="${FRONTEND_URL}/dashboard" style="color:${COLOR_PRIMARY};font-size:13px;text-decoration:none;margin:0 12px;">Dashboard</a>
-              <span style="color:#cbd5e1;">|</span>
-              <a href="${FRONTEND_URL}/perfil" style="color:${COLOR_PRIMARY};font-size:13px;text-decoration:none;margin:0 12px;">Mi Cuenta</a>
+            <td style="padding-bottom:12px;">
+              <a href="${FRONTEND_URL}" style="color:${COLOR_MUTED};font-size:12px;text-decoration:none;margin:0 10px;">Inicio</a>
+              <span style="color:${COLOR_BORDER};">·</span>
+              <a href="${FRONTEND_URL}/dashboard" style="color:${COLOR_MUTED};font-size:12px;text-decoration:none;margin:0 10px;">Dashboard</a>
+              <span style="color:${COLOR_BORDER};">·</span>
+              <a href="${FRONTEND_URL}/perfil" style="color:${COLOR_MUTED};font-size:12px;text-decoration:none;margin:0 10px;">Perfil</a>
             </td>
           </tr>
         </table>
-        <p style="color:#94a3b8;font-size:11px;text-align:center;margin:12px 0 0;">
-          \u00A9 2026 SGPE \u2014 Todos los derechos reservados<br>
-          <span style="color:#64748b;">Este correo fue enviado autom\u00E1ticamente, por favor no respondas a este mensaje.</span>
+        <p style="color:#3f3f46;font-size:11px;margin:4px 0 0;letter-spacing:0.3px;">
+          © 2026 SGPE · Todos los derechos reservados
+        </p>
+        <p style="color:#27272a;font-size:10px;margin:8px 0 0;letter-spacing:0.2px;">
+          Este correo fue enviado automáticamente · no respondas a este mensaje
         </p>
       </td>
     </tr>
@@ -59,7 +66,7 @@ function layout(content: string): string {
 export const enviarCorreo = async (to: string, subject: string, html: string, text?: string): Promise<void> => {
   try {
     if (!resend) {
-      console.log(`\uD83D\uDCE7 [Simulado] Correo a: ${to} - Asunto: ${subject}`);
+      console.log(`[Simulado] Correo a: ${to} - Asunto: ${subject}`);
       return;
     }
     await resend.emails.send({
@@ -69,128 +76,81 @@ export const enviarCorreo = async (to: string, subject: string, html: string, te
       html,
       text,
     });
-    console.log(`\uD83D\uDCE7 Correo enviado a: ${to}`);
+    console.log(`Correo enviado a: ${to}`);
   } catch (error) {
-    console.error('\u274C Error al enviar correo:', error);
+    console.error('Error al enviar correo:', error);
   }
 };
-
-export async function sendWelcomeEmail(destinatario: { nombre: string; correo: string; rol: string }): Promise<void> {
-  const rolLabel: Record<string, string> = {
-    GERENTE: 'Gerente de Proyectos',
-    MIEMBRO: 'Miembro del Equipo',
-    CLIENTE: 'Cliente',
-    VIEWER: 'Visitante',
-  };
-
-  const html = layout(`
-    <div style="text-align:center;margin-bottom:28px;">
-      <div style="display:inline-block;width:72px;height:72px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:50%;line-height:72px;font-size:36px;">🎉</div>
-    </div>
-    <h2 style="color:#0f172a;font-size:24px;margin:0 0 8px;text-align:center;">¡Bienvenido, ${destinatario.nombre}!</h2>
-    <p style="color:#64748b;font-size:15px;line-height:1.7;text-align:center;margin:0 0 24px;">
-      Tu cuenta ha sido creada en <strong style="color:${COLOR_PRIMARY};">SGPE</strong> con el rol 
-      <strong style="color:#0f172a;background:#f1f5f9;padding:2px 10px;border-radius:6px;">${rolLabel[destinatario.rol] || destinatario.rol}</strong>
-    </p>
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:12px;padding:20px;margin:0 0 24px;">
-      <tr>
-        <td style="width:33%;text-align:center;padding:8px;">
-          <div style="font-size:28px;margin-bottom:4px;">📋</div>
-          <div style="color:#475569;font-size:12px;font-weight:600;">Proyectos</div>
-          <div style="color:#94a3b8;font-size:11px;">Crea y gestiona</div>
-        </td>
-        <td style="width:33%;text-align:center;padding:8px;">
-          <div style="font-size:28px;margin-bottom:4px;">✅</div>
-          <div style="color:#475569;font-size:12px;font-weight:600;">Tareas</div>
-          <div style="color:#94a3b8;font-size:11px;">Organiza y avanza</div>
-        </td>
-        <td style="width:33%;text-align:center;padding:8px;">
-          <div style="font-size:28px;margin-bottom:4px;">🤝</div>
-          <div style="color:#475569;font-size:12px;font-weight:600;">Equipo</div>
-          <div style="color:#94a3b8;font-size:11px;">Colabora en tiempo real</div>
-        </td>
-      </tr>
-    </table>
-    <table width="100%" cellpadding="0" cellspacing="0">
-      <tr>
-        <td align="center">
-          <a href="${FRONTEND_URL}"
-             style="display:inline-block;padding:14px 48px;background:linear-gradient(135deg,${COLOR_PRIMARY},${COLOR_SECONDARY});color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;border-radius:12px;box-shadow:0 4px 14px rgba(99,102,241,0.4);">
-            🚀 Ir a SGPE
-          </a>
-        </td>
-      </tr>
-    </table>
-  `);
-
-  await enviarCorreo(destinatario.correo, '🎉 ¡Bienvenido a SGPE!', html);
-}
 
 export async function sendVerificationEmail(destinatario: { nombre: string; correo: string; token: string }): Promise<void> {
   const link = `${API_URL}/api/verification/confirmar/${destinatario.token}`;
 
   const html = layout(`
-    <div style="text-align:center;margin-bottom:28px;">
-      <div style="display:inline-block;width:72px;height:72px;background:linear-gradient(135deg,${COLOR_ACCENT},#0284c7);border-radius:50%;line-height:72px;font-size:36px;">✉️</div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="display:inline-block;width:56px;height:56px;border:1px solid ${COLOR_BORDER};border-radius:16px;line-height:56px;font-size:24px;">
+        <span style="filter:grayscale(1) brightness(1.5);">&#9993;</span>
+      </div>
     </div>
-    <h2 style="color:#0f172a;font-size:24px;margin:0 0 8px;text-align:center;">Verifica tu correo</h2>
-    <p style="color:#64748b;font-size:15px;line-height:1.7;text-align:center;margin:0 0 8px;">
-      Hola <strong>${destinatario.nombre}</strong>, gracias por registrarte en SGPE.
-    </p>
-    <p style="color:#64748b;font-size:15px;line-height:1.7;text-align:center;margin:0 0 24px;">
-      Para empezar a usar tu cuenta, confirma tu direcci\u00F3n de correo haciendo clic en el bot\u00F3n:
+    <p style="color:${COLOR_MUTED};font-size:13px;margin:0 0 4px;text-align:center;letter-spacing:1px;text-transform:uppercase;">Bienvenido a SGPE</p>
+    <h2 style="color:${COLOR_TEXT};font-size:22px;margin:0 0 20px;text-align:center;font-weight:500;letter-spacing:-0.3px;">${destinatario.nombre}</h2>
+    <p style="color:${COLOR_MUTED};font-size:14px;line-height:1.8;text-align:center;margin:0 0 32px;max-width:380px;margin-left:auto;margin-right:auto;">
+      Solo falta un paso. Confirma tu correo para comenzar a usar SGPE.
     </p>
     <table width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td align="center">
           <a href="${link}"
-             style="display:inline-block;padding:14px 48px;background:linear-gradient(135deg,${COLOR_ACCENT},#0284c7);color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;border-radius:12px;box-shadow:0 4px 14px rgba(6,182,212,0.4);">
-            ✅ Verificar correo
+             style="display:inline-block;padding:13px 40px;background:${COLOR_ACCENT};color:#0a0a0f;text-decoration:none;font-size:13px;font-weight:600;border-radius:10px;letter-spacing:0.5px;">
+            Confirmar correo
           </a>
         </td>
       </tr>
     </table>
-    <p style="color:#94a3b8;font-size:13px;text-align:center;margin:24px 0 0;">
-      O copia este enlace en tu navegador:<br>
-      <a href="${link}" style="color:${COLOR_PRIMARY};font-size:12px;word-break:break-all;">${link}</a>
+    <p style="color:#3f3f46;font-size:12px;text-align:center;margin:24px 0 0;">
+      O copia este enlace en tu navegador:
     </p>
-    <p style="color:#f59e0b;font-size:12px;text-align:center;margin:16px 0 0;">⏰ Este enlace expira en 24 horas.</p>
+    <p style="text-align:center;margin:4px 0 0;">
+      <a href="${link}" style="color:${COLOR_ACCENT};font-size:11px;word-break:break-all;text-decoration:none;border-bottom:1px dotted ${COLOR_BORDER};padding-bottom:1px;">${link}</a>
+    </p>
+    <p style="color:#27272a;font-size:11px;text-align:center;margin:28px 0 0;letter-spacing:0.2px;">Este enlace expira en 24 horas</p>
   `);
 
-  await enviarCorreo(destinatario.correo, '✅ Verifica tu correo - SGPE', html);
+  await enviarCorreo(destinatario.correo, 'Confirma tu correo · SGPE', html);
 }
 
 export async function sendPasswordResetEmail(destinatario: { nombre: string; correo: string; token: string }): Promise<void> {
   const link = `${FRONTEND_URL}/reset-password/${destinatario.token}`;
 
   const html = layout(`
-    <div style="text-align:center;margin-bottom:28px;">
-      <div style="display:inline-block;width:72px;height:72px;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:50%;line-height:72px;font-size:36px;">🔐</div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="display:inline-block;width:56px;height:56px;border:1px solid ${COLOR_BORDER};border-radius:16px;line-height:56px;font-size:24px;">
+        <span style="filter:grayscale(1) brightness(1.5);">&#9881;</span>
+      </div>
     </div>
-    <h2 style="color:#0f172a;font-size:24px;margin:0 0 8px;text-align:center;">Recupera tu contraseña</h2>
-    <p style="color:#64748b;font-size:15px;line-height:1.7;text-align:center;margin:0 0 8px;">
-      Hola <strong>${destinatario.nombre}</strong>, recibimos una solicitud para restablecer tu contraseña.
-    </p>
-    <p style="color:#64748b;font-size:15px;line-height:1.7;text-align:center;margin:0 0 24px;">
-      Haz clic en el bot\u00F3n para crear una nueva contraseña:
+    <p style="color:${COLOR_MUTED};font-size:13px;margin:0 0 4px;text-align:center;letter-spacing:1px;text-transform:uppercase;">Recuperaci\u00F3n de contrase\u00F1a</p>
+    <h2 style="color:${COLOR_TEXT};font-size:22px;margin:0 0 20px;text-align:center;font-weight:500;letter-spacing:-0.3px;">${destinatario.nombre}</h2>
+    <p style="color:${COLOR_MUTED};font-size:14px;line-height:1.8;text-align:center;margin:0 0 32px;max-width:380px;margin-left:auto;margin-right:auto;">
+      Recibimos una solicitud para restablecer tu contrase\u00F1a. Hac\u00E9 clic abajo para crear una nueva.
     </p>
     <table width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td align="center">
           <a href="${link}"
-             style="display:inline-block;padding:14px 48px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;border-radius:12px;box-shadow:0 4px 14px rgba(245,158,11,0.4);">
-            🔑 Restablecer contraseña
+             style="display:inline-block;padding:13px 40px;background:${COLOR_ACCENT};color:#0a0a0f;text-decoration:none;font-size:13px;font-weight:600;border-radius:10px;letter-spacing:0.5px;">
+            Restablecer contrase\u00F1a
           </a>
         </td>
       </tr>
     </table>
-    <p style="color:#94a3b8;font-size:13px;text-align:center;margin:24px 0 0;">
-      O copia este enlace:<br>
-      <a href="${link}" style="color:${COLOR_PRIMARY};font-size:12px;word-break:break-all;">${link}</a>
+    <p style="color:#3f3f46;font-size:12px;text-align:center;margin:24px 0 0;">
+      O copia este enlace:
     </p>
-    <p style="color:#ef4444;font-size:12px;text-align:center;margin:16px 0 0;">⚠️ Si no solicitaste esto, ignora este correo.</p>
-    <p style="color:#f59e0b;font-size:12px;text-align:center;margin:8px 0 0;">⏰ Este enlace expira en 1 hora.</p>
+    <p style="text-align:center;margin:4px 0 0;">
+      <a href="${link}" style="color:${COLOR_ACCENT};font-size:11px;word-break:break-all;text-decoration:none;border-bottom:1px dotted ${COLOR_BORDER};padding-bottom:1px;">${link}</a>
+    </p>
+    <p style="color:#27272a;font-size:11px;text-align:center;margin:28px 0 0;letter-spacing:0.2px;">Este enlace expira en 1 hora</p>
+    <p style="color:#3f3f46;font-size:11px;text-align:center;margin:8px 0 0;letter-spacing:0.2px;">Si no solicitaste esto, ignor\u00E1 este correo.</p>
   `);
 
-  await enviarCorreo(destinatario.correo, '🔐 Recuperación de contraseña - SGPE', html);
+  await enviarCorreo(destinatario.correo, 'Recuperaci\u00F3n de contrase\u00F1a · SGPE', html);
 }
