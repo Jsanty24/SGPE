@@ -46,8 +46,8 @@ export default function PerfilPage() {
   const [noMolFin, setNoMolFin]         = useState('08:00');
   const [savingNM, setSavingNM]         = useState(false);
 
-  const { register: regPerfil, handleSubmit: submitPerfil, formState: { errors: errPerfil } } =
-    useForm<PerfilForm>({ resolver: zodResolver(perfilSchema), defaultValues: { nombre: usuario?.nombre, correo: usuario?.correo } });
+  const { register: regPerfil, handleSubmit: submitPerfil, reset: resetPerfil, formState: { errors: errPerfil } } =
+    useForm<PerfilForm>({ resolver: zodResolver(perfilSchema), values: { nombre: usuario?.nombre || '', correo: usuario?.correo || '' } });
 
   const { register: regPass, handleSubmit: submitPass, reset: resetPass, formState: { errors: errPass } } =
     useForm<PasswordForm>({ resolver: zodResolver(passwordSchema) });
@@ -73,6 +73,7 @@ export default function PerfilPage() {
       const res = await usuarioService.update(usuario!.id, data);
       if (res.data.success && res.data.data) {
         refreshUser(res.data.data);
+        resetPerfil(res.data.data);
       }
       success('Perfil actualizado', 'Tus datos fueron guardados');
     } catch (err: any) {

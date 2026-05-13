@@ -211,7 +211,7 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -8, scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-                className="absolute -right-2 sm:right-0 top-12 w-[90vw] sm:w-80 rounded-2xl overflow-hidden z-50 origin-top-right"
+                className="absolute right-0 top-12 w-[90vw] sm:w-80 rounded-2xl overflow-hidden z-50 origin-top-right"
                 style={{ background: 'var(--glass-bg)', backdropFilter: 'var(--glass-blur)', border: '1px solid var(--glass-border)', boxShadow: 'var(--glass-shadow)' }}
               >
                 <div className="p-4 flex items-center justify-between" style={{ borderBottom: '1px solid var(--glass-border)' }}>
