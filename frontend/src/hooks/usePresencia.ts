@@ -9,6 +9,9 @@ interface PresenciaUpdate {
 
 type PresenciaCallback = (update: PresenciaUpdate) => void;
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const SOCKET_URL = API_URL.replace(/\/api$/, '');
+
 export function usePresencia(token: string | null, onUpdate: PresenciaCallback) {
   const socketRef = useRef<Socket | null>(null);
   const onUpdateRef = useRef(onUpdate);
@@ -17,8 +20,7 @@ export function usePresencia(token: string | null, onUpdate: PresenciaCallback) 
   useEffect(() => {
     if (!token) return;
 
-    const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-    const socket = io(socketUrl, {
+    const socket = io(SOCKET_URL, {
       auth: { token },
       transports: ['websocket', 'polling'],
     });
