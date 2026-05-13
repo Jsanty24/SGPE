@@ -27,6 +27,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [registrado, setRegistrado] = useState(false);
   const { isLowEnd, isHighEnd } = useDevicePerformance();
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
@@ -38,13 +39,41 @@ export default function RegisterPage() {
       setError('');
       setLoading(true);
       await registerUser({ nombre: data.nombre, correo: data.correo, contrasena: data.contrasena, rol: data.rol });
-      navigate('/proyectos');
+      setRegistrado(true);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al registrarse');
     } finally {
       setLoading(false);
     }
   };
+
+  if (registrado) {
+    return (
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #0d1f2d, #01696f)' }}>
+        <div className="relative z-10 w-full max-w-md mx-4 text-center">
+          <div className="glass-card rounded-2xl p-8">
+            <div className="text-5xl mb-6">📧</div>
+            <h2 className="text-2xl font-bold text-dark-text mb-4">¡Registro exitoso!</h2>
+            <p className="text-dark-muted mb-4 leading-relaxed">
+              Te enviamos un correo de verificación a <strong className="text-primary-400">{/* no tenemos el correo a mano */}</strong>.
+            </p>
+            <p className="text-dark-muted mb-6 leading-relaxed">
+              Revisa tu bandeja de entrada y haz clic en el enlace para verificar tu cuenta.
+              Luego podrás iniciar sesión.
+            </p>
+            <div className="text-sm text-dark-muted mb-6 p-3 rounded-lg bg-dark-bg/50">
+              💡 Si no lo encuentras, revisa la carpeta de spam.
+            </div>
+            <Link to="/login"
+              className="inline-block w-full py-3 rounded-xl text-white font-semibold shimmer-btn text-center">
+              Ir a iniciar sesión
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden"

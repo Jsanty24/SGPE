@@ -60,9 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const register = useCallback(async (regData: { nombre: string; correo: string; contrasena: string; rol?: string }) => {
     const { data } = await authService.register(regData);
-    if (data.success && data.data) {
-      guardarSesion(data.data.token, data.data.refreshToken, data.data.usuario);
-    }
+    if (!data.success) throw new Error(data.message || 'Error al registrarse');
   }, []);
 
   const logout = useCallback(() => {
