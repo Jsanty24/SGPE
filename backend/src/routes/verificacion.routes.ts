@@ -15,7 +15,7 @@ router.get('/enviar', async (req: Request, res: Response) => {
     if (usuario.emailVerificado) { res.json({ success: true, message: 'El correo ya esta verificado' }); return; }
 
     const token = crypto.randomBytes(32).toString('hex');
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = process.env.FRONTEND_URL || 'https://sgpe.online';
 
     await prisma.usuario.update({
       where: { id: usuario.id },
@@ -34,17 +34,12 @@ router.get('/confirmar/:token', async (req: Request, res: Response) => {
   try {
     const { token } = req.params;
 
-    const usuarios = await prisma.usuario.findMany({
-      where: { tokenVerifEmail: { not: null }, emailVerificado: false },
+    const encontrado = await prisma.usuario.findFirst({
+      where: { tokenVerifEmail: token, emailVerificado: false },
     });
 
-    let encontrado = null;
-    for (const u of usuarios) {
-      if (u.tokenVerifEmail === token) { encontrado = u; break; }
-    }
-
     if (!encontrado) {
-      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+      const frontendUrl = process.env.FRONTEND_URL || 'https://sgpe.online';
       res.redirect(`${frontendUrl}/login?verificado=error`);
       return;
     }
@@ -54,7 +49,7 @@ router.get('/confirmar/:token', async (req: Request, res: Response) => {
       data: { emailVerificado: true, tokenVerifEmail: null },
     });
 
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = process.env.FRONTEND_URL || 'https://sgpe.online';
     res.redirect(`${frontendUrl}/login?verificado=ok`);
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Error al verificar correo' });
