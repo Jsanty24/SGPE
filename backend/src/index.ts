@@ -37,6 +37,8 @@ const io = new Server(httpServer, {
   },
 });
 
+app.set('trust proxy', true);
+
 app.use(helmet({
   contentSecurityPolicy: false,
 }));
