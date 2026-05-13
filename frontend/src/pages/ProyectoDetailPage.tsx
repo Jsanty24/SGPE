@@ -82,13 +82,13 @@ export default function ProyectoDetailPage() {
     if (id) {
       archivoProyectoService.getByProyecto(id).then(({ data }) => {
         if (data.success && data.data) setProyectoArchivos(data.data);
-      }).catch(() => {});
+      }).catch((err) => console.error('Error al cargar archivos:', err));
     }
   }, [id]);
   useEffect(() => {
     usuarioService.getAllActive().then(({ data }) => {
       if (data.success && data.data) setUsuarios(data.data);
-    }).catch(() => {});
+    }).catch((err) => console.error('Error al cargar usuarios:', err));
   }, []);
 
   const esGerenteOAdmin = usuario?.rol === 'ADMIN' || (proyecto && proyecto.gerenteId === usuario?.id);
@@ -106,7 +106,7 @@ export default function ProyectoDetailPage() {
           });
           payload.lat = pos.coords.latitude;
           payload.lng = pos.coords.longitude;
-        } catch {}
+        } catch (e) { console.error('Geolocation error:', e); }
       }
       await tareaService.changeEstado(tareaId, nuevoEstado, payload);
     } catch (err: any) {

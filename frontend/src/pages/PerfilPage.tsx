@@ -57,14 +57,14 @@ export default function PerfilPage() {
       tareaService.getMyTasks(),
       proyectoService.getAll(),
     ]).then(([tareasRes, proyRes]) => {
-      const tareas = tareasRes.status === 'fulfilled' ? tareasRes.value.data.data || [] : [];
-      const proyectos = proyRes.status === 'fulfilled' ? proyRes.value.data.data || [] : [];
+      const tareas = tareasRes.status === 'fulfilled' ? tareasRes.value?.data?.data ?? [] : [];
+      const proyectos = proyRes.status === 'fulfilled' ? proyRes.value?.data?.data ?? [] : [];
       setStats({
         tareas: tareas.length,
         completadas: tareas.filter((t: any) => t.estado === 'TERMINADA').length,
         proyectos: proyectos.filter((p: any) => p.miembros?.some((m: any) => m.usuarioId === usuario?.id) || p.gerenteId === usuario?.id).length,
       });
-    });
+    }).catch((err) => console.error('Error al cargar stats:', err));
   }, [usuario?.id]);
 
   const onSavePerfil = async (data: PerfilForm) => {

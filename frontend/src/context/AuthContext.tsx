@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (savedToken && savedUser) {
       setToken(savedToken);
       setRefreshToken(savedRefresh);
-      setUsuario(JSON.parse(savedUser));
+      try { setUsuario(JSON.parse(savedUser)); } catch { localStorage.clear(); }
     }
     setLoading(false);
   }, []);
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const logout = useCallback(() => {
-    authService.logout().catch(() => {});
+    authService.logout().catch((err) => console.error('Logout error:', err));
     setUsuario(null);
     setToken(null);
     setRefreshToken(null);
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
     } else {
       const savedUser = localStorage.getItem('sgpe_usuario');
-      if (savedUser) setUsuario(JSON.parse(savedUser));
+      if (savedUser) { try { setUsuario(JSON.parse(savedUser)); } catch { localStorage.removeItem('sgpe_usuario'); } }
     }
   }, []);
 

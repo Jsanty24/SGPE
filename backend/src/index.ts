@@ -62,7 +62,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'production' ? 1000 : 100,
+  max: process.env.NODE_ENV === 'production' ? 1000 : 500,
   message: 'Too many requests from this IP, please try again later.',
   skip: (req) => {
     // Skip rate limiting for health checks

@@ -104,11 +104,16 @@ export default function LoginPage() {
   const particleCount = isLowEnd ? 500 : isHighEnd ? 2500 : 1500;
 
   // Auto-focus on email
-  useEffect(() => { setTimeout(() => emailRef.current?.focus(), 400); }, []);
+  useEffect(() => {
+    const t = setTimeout(() => emailRef.current?.focus(), 400);
+    return () => clearTimeout(t);
+  }, []);
 
   // Caps lock detection
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => setCapsLock(e.getModifierState('CapsLock'));
+    const handler = (e: KeyboardEvent) => {
+      if (typeof e.getModifierState === 'function') setCapsLock(e.getModifierState('CapsLock'));
+    };
     window.addEventListener('keydown', handler);
     window.addEventListener('keyup', handler);
     return () => { window.removeEventListener('keydown', handler); window.removeEventListener('keyup', handler); };
