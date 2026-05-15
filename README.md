@@ -65,7 +65,6 @@ npm run dev
 ## ✨ Características
 
 ### Autenticación y Seguridad
-- **Windows Hello** - Inicio de sesión facial con cámara IR
 - **Verificación por email** - Código de verificación al registrarse usando Resend
 - **JWT** con roles (Admin, Gerente, Miembro, Cliente)
 - **Rate limiting** - Bloqueo tras 5 intentos fallidos de login
