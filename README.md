@@ -1,6 +1,6 @@
 # SGPE - Sistema de Gestión de Proyectos para Empresas
 
-Sistema completo de gestión de proyectos con autenticación biométrica (Windows Hello), verificación por email, WebSocket en tiempo real, kanban, calendario, reportes PDF, y modo claro/oscuro.
+Sistema completo de gestión de proyectos con verificación por email, WebSocket en tiempo real, kanban, calendario, reportes PDF, y modo claro/oscuro.
 
 ---
 
