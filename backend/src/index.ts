@@ -33,7 +33,7 @@ const ALWAYS_ALLOWED = ['http://localhost:5173', 'https://sgpe-nu.vercel.app', '
 
 const io = new Server(httpServer, {
   cors: {
-    origin: [...new Set([...ALWAYS_ALLOWED, 'https://sgpe-production.up.railway.app', ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim()) : [])])],
+    origin: [...new Set([...ALWAYS_ALLOWED, 'https://sgpe-production-9cf0.up.railway.app', ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim()) : [])])],
     credentials: true,
     methods: ['GET', 'POST'],
   },

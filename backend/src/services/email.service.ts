@@ -7,7 +7,7 @@ const resend = process.env.RESEND_API_KEY
 const FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@sgpe.online';
 const FROM_NAME = 'SGPE';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://sgpe.online';
-const API_URL = process.env.API_URL || 'https://sgpe-production.up.railway.app';
+const API_URL = process.env.API_URL || 'https://sgpe-production-9cf0.up.railway.app';
 
 const COLOR_BG = '#0a0a0f';
 const COLOR_CARD = '#12121a';
