@@ -29,7 +29,7 @@ const app = express();
 const httpServer = createServer(app);
 const prisma = new PrismaClient();
 
-const ALWAYS_ALLOWED = ['http://localhost:5173', 'https://sgpe-nu.vercel.app', 'https://sgpe.online', 'https://www.sgpe.online'];
+const ALWAYS_ALLOWED = ['http://localhost:5173', 'https://sgpe-nu.vercel.app', 'https://sgpe-pi.vercel.app', 'https://sgpe.online', 'https://www.sgpe.online'];
 
 const io = new Server(httpServer, {
   cors: {
