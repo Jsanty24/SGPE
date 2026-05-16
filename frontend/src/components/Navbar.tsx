@@ -80,14 +80,19 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
   const presencia = presenciaUsuarios?.[usuario?.id];
   const estadoReal = presencia?.estado || usuario?.estado || 'ACTIVO';
 
-  const saveLocation = () => {
+  const saveLocation = async () => {
     if (!navigator.geolocation) { toastError('Ubicación', 'Geolocalización no disponible'); return; }
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      try {
-        await usuarioService.updateUbicacion(usuario.id, pos.coords.latitude, pos.coords.longitude);
-        success('Ubicación guardada', `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
-      } catch { toastError('Error', 'No se pudo guardar la ubicación'); }
-    }, () => toastError('Ubicación', 'Permiso denegado'));
+    try {
+      const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 })
+      );
+      await usuarioService.updateUbicacion(usuario.id, pos.coords.latitude, pos.coords.longitude);
+      success('Ubicación guardada', `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
+    } catch (e) {
+      const err = e as GeolocationPositionError;
+      if (err.code === err.PERMISSION_DENIED) toastError('Ubicación', 'Permiso denegado');
+      else toastError('Ubicación', 'No se pudo obtener la ubicación');
+    }
   };
 
   // Scroll detection — glass reveal
