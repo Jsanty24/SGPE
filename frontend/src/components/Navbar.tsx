@@ -90,9 +90,10 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
       success('Ubicación guardada', `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
     } catch (e) {
       const err = e as GeolocationPositionError;
+      console.error('Geolocation error:', err.code, err.message);
       if (err.code === err.PERMISSION_DENIED) toastError('Ubicación', 'Permiso denegado. Activá la ubicación en el navegador');
       else if (err.code === err.TIMEOUT) toastError('Ubicación', 'Tiempo de espera agotado, intentá de nuevo');
-      else toastError('Ubicación', 'No se pudo obtener la ubicación. ¿Activaste los servicios de ubicación?');
+      else toastError('Ubicación', `Ubicación no disponible (${err.message})`);
     }
   };
 
