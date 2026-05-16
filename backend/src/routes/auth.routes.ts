@@ -14,8 +14,8 @@ const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
   throw new Error('JWT_SECRET no esta definido en las variables de entorno');
 }
-const ACCESS_TOKEN_EXPIRY = '15m';
-const REFRESH_TOKEN_EXPIRY_DAYS = 7;
+const ACCESS_TOKEN_EXPIRY = '1h';
+const REFRESH_TOKEN_EXPIRY_DAYS = 30;
 const BCRYPT_ROUNDS = 12;
 
 const generarTokens = async (usuario: { id: string; correo: string; rol: string }) => {
