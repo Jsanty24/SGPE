@@ -42,8 +42,11 @@ export default function UserAvatar({ usuario, size = 'md', className = '' }: Use
   const bg = getAvatarColor(usuario.nombre || '');
 
   if (usuario.avatar && !imgError) {
+    const src = usuario.avatar.startsWith('/api/')
+      ? `${import.meta.env.VITE_API_URL || ''}${usuario.avatar}`
+      : usuario.avatar;
     return (
-      <img src={usuario.avatar} alt={usuario.nombre}
+      <img src={src} alt={usuario.nombre}
         className={`${sizeClasses[size]} rounded-full object-cover ${className}`}
         style={{ minWidth: 'unset' }}
         onError={() => setImgError(true)} />

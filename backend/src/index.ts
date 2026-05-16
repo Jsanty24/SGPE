@@ -21,6 +21,7 @@ import chatRoutes from './routes/chat.routes';
 import cuentaRoutes from './routes/cuenta.routes';
 import historialRoutes from './routes/historial.routes';
 import verificacionRoutes from './routes/verificacion.routes';
+import path from 'path';
 import { errorHandler } from './middlewares/errorHandler';
 import { setupCronJobs } from './services/cron.service';
 import { setupSocketIO } from './services/socketService';
@@ -46,6 +47,8 @@ app.use(helmet({
 }));
 
 app.use(compression());
+
+app.use('/api/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 app.use(cors({
   origin: (origin, callback) => {
