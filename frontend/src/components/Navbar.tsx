@@ -84,14 +84,15 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
     if (!navigator.geolocation) { toastError('Ubicación', 'Geolocalización no disponible'); return; }
     try {
       const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
-        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 })
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000, enableHighAccuracy: false })
       );
       await usuarioService.updateUbicacion(usuario.id, pos.coords.latitude, pos.coords.longitude);
       success('Ubicación guardada', `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
     } catch (e) {
       const err = e as GeolocationPositionError;
-      if (err.code === err.PERMISSION_DENIED) toastError('Ubicación', 'Permiso denegado');
-      else toastError('Ubicación', 'No se pudo obtener la ubicación');
+      if (err.code === err.PERMISSION_DENIED) toastError('Ubicación', 'Permiso denegado. Activá la ubicación en el navegador');
+      else if (err.code === err.TIMEOUT) toastError('Ubicación', 'Tiempo de espera agotado, intentá de nuevo');
+      else toastError('Ubicación', 'No se pudo obtener la ubicación. ¿Activaste los servicios de ubicación?');
     }
   };
 
